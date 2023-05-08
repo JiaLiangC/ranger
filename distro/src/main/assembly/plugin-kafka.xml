@@ -49,6 +49,8 @@
 				<directoryMode>755</directoryMode>
 				<fileMode>644</fileMode>
 				<includes>
+					<include>org.apache.hadoop.thirdparty:hadoop-shaded-guava</include>
+					<include>org.apache.commons:commons-compress</include>
 					<include>org.apache.commons:commons-configuration2:jar:${commons.configuration.version}</include>
 					<include>org.apache.hadoop:hadoop-common:jar:${hadoop.version}</include>
 					<include>org.apache.hadoop:hadoop-common-plus:jar:${hadoop.version}</include>
