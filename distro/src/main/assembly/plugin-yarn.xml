@@ -54,6 +54,7 @@
         <fileMode>644</fileMode>
         <includes>
           <include>commons-lang:commons-lang:jar:${commons.lang.version}</include>
+          <include>org.codehaus.jackson:jackson-jaxrs:jar:${codehaus.jackson.version}</include>
           <include>org.eclipse.jetty:jetty-client:jar:${jetty-client.version}</include>
           <include>org.apache.httpcomponents:httpmime:jar:${httpcomponents.httpmime.version}</include>
           <include>org.apache.httpcomponents:httpclient:jar:${httpcomponents.httpclient.version}</include>
