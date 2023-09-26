@@ -38,8 +38,8 @@ def isWindowsSystem():
 
 def check_output(query):
 	try:
-		output = subprocess.check_output(query)
-		return output.decode("UTF-8")
+		output = subprocess.check_output(query, universal_newlines=True)
+		return output
 	except CalledProcessError:
 		# Not a git repository, or no git is installed
 		return ''
@@ -108,7 +108,7 @@ def main():
 		c.append(f)
 
 	srcChecksum = hashlib.sha512(''.join(c).encode('UTF-8')).hexdigest()
-	print('hash of the ' + str(len(sortedList)) + '\n\t file from: ' + parent_dir + '\n\t is ' + srcChecksum)
+	print(('hash of the ' + str(len(sortedList)) + '\n\t file from: ' + parent_dir + '\n\t is ' + srcChecksum))
 
 	dir = os.path.join(src_dir,"target","gen","org","apache","ranger","common")
 	if not os.path.exists(dir):

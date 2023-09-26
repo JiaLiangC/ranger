@@ -66,7 +66,7 @@ admin_delete_grp_url_template = "{}/service/xusers/secure/groups/{}?forceDelete=
 admin_delete_rol_url_template = "{}/service/roles/roles/name/{}".format(args.host.rstrip('/'), "{}")
 
 def log(log_group, message):
-   print(str(datetime.now()) + " [" + log_group + "] " + message)
+   print((str(datetime.now()) + " [" + log_group + "] " + message))
 
 def get_policy_version():
    resp = session.get(admin_get_service_url)

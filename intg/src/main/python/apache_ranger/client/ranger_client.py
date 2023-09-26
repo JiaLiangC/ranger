@@ -36,7 +36,7 @@ from urllib.parse                             import urljoin
 
 LOG = logging.getLogger(__name__)
 
-QUERY_PARAM_USER_DOT_NAME = 'user.name'.encode("utf-8")
+QUERY_PARAM_USER_DOT_NAME = 'user.name'
 
 
 class RangerClient:
@@ -397,7 +397,7 @@ class RangerClient:
 
 class HadoopSimpleAuth(AuthBase):
   def __init__(self, user_name):
-    self.user_name = user_name.encode("utf-8")
+    self.user_name = user_name
 
   def __call__(self, req):
     sep_char = '?'

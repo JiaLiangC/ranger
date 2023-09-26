@@ -45,7 +45,7 @@ def type_coerce_list(obj, objType):
 def type_coerce_dict(obj, objType):
     if isinstance(obj, dict):
         ret = {}
-        for k, v in obj.items():
+        for k, v in list(obj.items()):
             ret[k] = type_coerce(v, objType)
     else:
         ret = None
@@ -55,7 +55,7 @@ def type_coerce_dict(obj, objType):
 def type_coerce_dict_list(obj, objType):
     if isinstance(obj, dict):
         ret = {}
-        for k, v in obj.items():
+        for k, v in list(obj.items()):
             ret[k] = type_coerce_list(v, objType)
     else:
         ret = None

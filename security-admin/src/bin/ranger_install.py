@@ -17,11 +17,11 @@ import errno
 import logging
 import zipfile
 try:
-    from StringIO import StringIO
+    from io import StringIO
 except ImportError:
     from io import StringIO
 try:
-    from ConfigParser import ConfigParser
+    from configparser import ConfigParser
 except ImportError:
     from configparser import ConfigParser
 import subprocess
@@ -83,9 +83,9 @@ def getstatusoutput(cmd):
     """
     ret = subprocess.call(cmd, shell=True)
     print("------------------")
-    print(" cmd: " + str(cmd))
+    print((" cmd: " + str(cmd)))
     #print " output: " + output
-    print(" ret: " + str(ret))
+    print((" ret: " + str(ret)))
     print("------------------")
     return ret, ret
     #if sts is None:
@@ -383,7 +383,7 @@ def write_config_to_file():
     file_path = os.path.dirname(os.path.realpath(__file__))
     write_conf_to_file = os.path.join(file_path, "install_config.properties")
     open(write_conf_to_file,'wb')
-    for key,value in conf_dict.items():
+    for key,value in list(conf_dict.items()):
         if 'PASSWORD' in key :
             #call_keystore(library_path,key,value,jceks_file_path,'create')
             value=''
@@ -489,8 +489,8 @@ def check_mysql_password ():
 
     cmdStr = "\""+MYSQL_BIN+"\""+" -u root --password="+db_root_password+" -h "+MYSQL_HOST+" -s -e \"select version();\""
     status, output = getstatusoutput(cmdStr)
-    print("Status: " + str(status))
-    print("output: " + str(output))
+    print(("Status: " + str(status)))
+    print(("output: " + str(output)))
 
     if status == 0:
         log("Checking MYSQL root password DONE", "info")
@@ -563,7 +563,7 @@ def upgrade_db():
         #import sql file
         proc = subprocess.Popen([MYSQL_BIN, "--user=%s" % db_user, "--host=%s" %MYSQL_HOST, "--password=%s" % db_password, db_name],
             stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE)
+            stdout=subprocess.PIPE, universal_newlines=True)
         out, err = proc.communicate(file(DBVERSION_CATALOG_CREATION).read())
         log("\nBaseline DB upgraded successfully\n", "info")
 
@@ -577,7 +577,7 @@ def upgrade_db():
             #apply_patches(cursor,currentPatch)
             proc = subprocess.Popen([MYSQL_BIN, "--user=%s" % db_user, "--host=%s" %MYSQL_HOST, "--password=%s" % db_password, db_name],
                         stdin=subprocess.PIPE,
-                        stdout=subprocess.PIPE)
+                        stdout=subprocess.PIPE, universal_newlines=True)
             out, err = proc.communicate(file(currentPatch).read())
             log( "\nPatch applied: " +  currentPatch +"\n", "debug")
 
@@ -628,7 +628,7 @@ def import_db ():
             log("Importing database : " + db_name + " from file: " + db_core_file,"info")
             proc = subprocess.Popen([MYSQL_BIN, "--user=%s" % db_user, "--host=%s" %MYSQL_HOST, "--password=%s" % db_password, db_name],
                         stdin=subprocess.PIPE,
-                        stdout=subprocess.PIPE)
+                        stdout=subprocess.PIPE, universal_newlines=True)
             out, err = proc.communicate(file(db_core_file).read())
             if (proc.returncode == 0):
                 log("\nAdmin db file Imported successfully\n","info")
@@ -642,7 +642,7 @@ def import_db ():
         if os.path.isfile(db_asset_file):
             proc = subprocess.Popen([MYSQL_BIN, "--user=%s" % db_user, "--host=%s" %MYSQL_HOST, "--password=%s" % db_password, db_name],
                         stdin=subprocess.PIPE,
-                        stdout=subprocess.PIPE)
+                        stdout=subprocess.PIPE, universal_newlines=True)
             out, err = proc.communicate(file(db_asset_file).read())
             if (proc.returncode == 0):
                 log("\nAsset file Imported successfully\n","info")
@@ -1221,7 +1221,7 @@ def setup_audit_user_db():
         if os.path.isfile(db_audit_file):
             proc = subprocess.Popen([MYSQL_BIN, "--user=%s" % audit_db_user, "--host=%s" %MYSQL_HOST, "--password=%s" % audit_db_password, audit_db_name],
                 stdin=subprocess.PIPE,
-                stdout=subprocess.PIPE)
+                stdout=subprocess.PIPE, universal_newlines=True)
             out, err = proc.communicate(file(db_audit_file).read())
             if (proc.returncode == 0):
                 log("\nAudit file Imported successfully\n","info")

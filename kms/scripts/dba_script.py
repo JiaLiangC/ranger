@@ -42,11 +42,11 @@ if RANGER_KMS_HOME is None:
 
 def check_output(query):
 	if is_unix:
-		p = subprocess.Popen(shlex.split(query), stdout=subprocess.PIPE)
+		p = subprocess.Popen(shlex.split(query), stdout=subprocess.PIPE, universal_newlines=True)
 	elif os_name == "WINDOWS":
-		p = subprocess.Popen(query, stdout=subprocess.PIPE, shell=True)
-	output = p.communicate ()[0]
-	return output.decode()
+		p = subprocess.Popen(query, stdout=subprocess.PIPE, shell=True, universal_newlines=True)
+	output = p.communicate()[0]
+	return output
 
 def log(msg,type):
 	if type == 'info':
@@ -1285,7 +1285,7 @@ def main(argv):
 			else :
 				while os.path.isfile(JAVA_BIN) == False:
 					log("Enter java executable path: :","info")
-					JAVA_BIN=input()
+					JAVA_BIN=eval(input())
 			log("[I] Using Java:" + str(JAVA_BIN),"info")
 
 	if (quiteMode):
@@ -1294,7 +1294,7 @@ def main(argv):
 		XA_DB_FLAVOR=''
 		while XA_DB_FLAVOR == "":
 			log("Enter db flavour{MYSQL|ORACLE|POSTGRES|MSSQL|SQLA} :","info")
-			XA_DB_FLAVOR=input()
+			XA_DB_FLAVOR=eval(input())
 
 	XA_DB_FLAVOR = XA_DB_FLAVOR.upper()
 	log("[I] DB FLAVOR:" + str(XA_DB_FLAVOR),"info")
@@ -1306,10 +1306,10 @@ def main(argv):
 		if not dryMode:
 			if XA_DB_FLAVOR == "MYSQL" or XA_DB_FLAVOR == "ORACLE" or XA_DB_FLAVOR == "POSTGRES" or XA_DB_FLAVOR == "MSSQL":
 				log("Enter JDBC connector file for :"+XA_DB_FLAVOR,"info")
-				CONNECTOR_JAR=input()
+				CONNECTOR_JAR=eval(input())
 				while os.path.isfile(CONNECTOR_JAR) == False:
 					log("JDBC connector file "+CONNECTOR_JAR+" does not exist, Please enter connector path :","error")
-					CONNECTOR_JAR=input()
+					CONNECTOR_JAR=eval(input())
 			else:
 				log("[E] ---------- NO SUCH SUPPORTED DB FLAVOUR.. ----------", "error")
 				sys.exit(1)
@@ -1324,7 +1324,7 @@ def main(argv):
 			xa_db_host=''
 			while xa_db_host == "":
 				log("Enter DB Host :","info")
-				xa_db_host=input()
+				xa_db_host=eval(input())
 
 	if (quiteMode):
 		xa_db_root_user = globalDict['db_root_user']
@@ -1337,7 +1337,7 @@ def main(argv):
 			xa_db_root_user=''
 			while xa_db_root_user == "":
 				log("Enter db root user:","info")
-				xa_db_root_user=input()
+				xa_db_root_user=eval(input())
 				log("Enter db root password:","info")
 				xa_db_root_password = getpass.getpass("Enter db root password:")
 
@@ -1350,7 +1350,7 @@ def main(argv):
 			db_name = ''
 			while db_name == "":
 				log("Enter DB Name :","info")
-				db_name=input()
+				db_name=eval(input())
 
 	if (quiteMode):
 		db_user = globalDict['db_user']
@@ -1361,7 +1361,7 @@ def main(argv):
 			db_user=''
 			while db_user == "":
 				log("Enter db user name:","info")
-				db_user=input()
+				db_user=eval(input())
 
 	if (quiteMode):
 		db_password = globalDict['db_password']

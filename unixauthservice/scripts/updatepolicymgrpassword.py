@@ -43,10 +43,10 @@ if RANGER_USERSYNC_HOME is None:
 
 def check_output(query):
 	if os_name == "LINUX":
-		p = subprocess.Popen(shlex.split(query), stdout=subprocess.PIPE)
+		p = subprocess.Popen(shlex.split(query), stdout=subprocess.PIPE, universal_newlines=True)
 	elif os_name == "WINDOWS":
-		p = subprocess.Popen(query, stdout=subprocess.PIPE, shell=True)
-	output = p.communicate ()[0]
+		p = subprocess.Popen(query, stdout=subprocess.PIPE, shell=True, universal_newlines=True)
+	output = p.communicate()[0]
 	return output
 
 def log(msg,type):
@@ -62,7 +62,7 @@ def log(msg,type):
 		logging.error(" %s",msg)
 
 def import_properties_from_xml(xml_path, properties_from_xml=None):
-	print('getting values from file : ' + str(xml_path))
+	print(('getting values from file : ' + str(xml_path)))
 	if os.path.isfile(xml_path):
 		xml = ET.parse(xml_path)
 		root = xml.getroot()
@@ -73,7 +73,7 @@ def import_properties_from_xml(xml_path, properties_from_xml=None):
 			value = child.find("value").text.strip() if child.find("value").text is not None  else ""
 			properties_from_xml[name] = value
 	else:
-		print('XML file not found at path : ' + str(xml_path))
+		print(('XML file not found at path : ' + str(xml_path)))
 	return properties_from_xml
 
 def populate_global_install_dict():
@@ -118,7 +118,7 @@ def main(argv):
 	else:
 		while os.path.isfile(JAVA_BIN) == False:
 			log("Enter java executable path: :","info")
-			JAVA_BIN=input()
+			JAVA_BIN=eval(input())
 	log("[I] Using Java:" + str(JAVA_BIN),"info")
 
 	globalDict=import_properties_from_xml(CFG_FILE,globalDict)
@@ -136,7 +136,7 @@ def main(argv):
 
 	while SYNC_POLICY_MGR_USERNAME == "":
 		print("Enter policymgr user name:")
-		SYNC_POLICY_MGR_USERNAME=input()
+		SYNC_POLICY_MGR_USERNAME=eval(input())
 
 	while SYNC_POLICY_MGR_PASSWORD == "":
 		SYNC_POLICY_MGR_PASSWORD=getpass.getpass("Enter policymgr user password:")

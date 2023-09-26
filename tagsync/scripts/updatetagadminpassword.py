@@ -38,10 +38,10 @@ os_name = os_name.upper()
 
 def check_output(query):
 	if os_name == "LINUX":
-		p = subprocess.Popen(shlex.split(query), stdout=subprocess.PIPE)
+		p = subprocess.Popen(shlex.split(query), stdout=subprocess.PIPE, universal_newlines=True)
 	elif os_name == "WINDOWS":	
-		p = subprocess.Popen(query, stdout=subprocess.PIPE, shell=True)
-	output = p.communicate ()[0]
+		p = subprocess.Popen(query, stdout=subprocess.PIPE, shell=True, universal_newlines=True)
+	output = p.communicate()[0]
 	return output
 
 def log(msg,type):
@@ -107,7 +107,7 @@ def main(argv):
 	else:
 		while os.path.isfile(JAVA_BIN) == False:
 			log("Enter java executable path: :","info")
-			JAVA_BIN=input()
+			JAVA_BIN=eval(input())
 	log("[I] Using Java:" + str(JAVA_BIN),"info")
 
 	globalDict=import_properties_from_xml(CFG_FILE,globalDict)
@@ -128,7 +128,7 @@ def main(argv):
 	while ENDPOINT == "" or not (ENDPOINT == "ATLAS" or ENDPOINT == "RANGER"):
 		sys.stdout.write('Enter Destination NAME (Ranger/Atlas):')
 		sys.stdout.flush()
-		ENDPOINT=input()
+		ENDPOINT=eval(input())
 		ENDPOINT = ENDPOINT.upper()
 
 	if ENDPOINT == "ATLAS":

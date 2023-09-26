@@ -57,11 +57,11 @@ if RANGER_ADMIN_CONF is None:
 
 def check_output(query):
 	if is_unix:
-		p = subprocess.Popen(shlex.split(query), stdout=subprocess.PIPE)
+		p = subprocess.Popen(shlex.split(query), stdout=subprocess.PIPE, universal_newlines=True)
 	elif os_name == "WINDOWS":
-		p = subprocess.Popen(query, stdout=subprocess.PIPE, shell=True)
-	output = p.communicate ()[0]
-	return output.decode()
+		p = subprocess.Popen(query, stdout=subprocess.PIPE, shell=True, universal_newlines=True)
+	output = p.communicate()[0]
+	return output
 
 def log(msg,type):
 	if type == 'info':
@@ -147,7 +147,7 @@ def dbversionBasedOnUserName(userName):
 	return version
 
 def set_env_val(command):
-	proc = subprocess.Popen(command, stdout = subprocess.PIPE)
+	proc = subprocess.Popen(command, stdout = subprocess.PIPE, universal_newlines=True)
 	for line in proc.stdout:
 		(key, _, value) = line.partition("=")
 		os.environ[key] = value.rstrip()

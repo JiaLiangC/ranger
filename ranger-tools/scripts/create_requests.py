@@ -28,7 +28,7 @@ for i in data['serviceResources']:
     resource_elements = i['resourceElements']
     temp = {'name': "request-" + str(resource_id), 'request': {'resource': {'elements': {}}, 'accessType': "select", 'user': "hrt_1", 'userGroups': [], 'requestData': "request-" + str(resource_id)}, 'result': {'isAudited': 'true', 'isAllowed': 'false', 'policyId': resource_id}}
 
-    resource_keys = resource_elements.keys()
+    resource_keys = list(resource_elements.keys())
     for resource_key in resource_keys:
         resource_item = resource_elements[resource_key]
         resource_value = resource_item['values'][0]

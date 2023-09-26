@@ -13,13 +13,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from __future__ import print_function
+
 try:
-	from StringIO import StringIO
+	from io import StringIO
 except ImportError:
 	from io import StringIO
 try:
-	from ConfigParser import ConfigParser
+	from configparser import ConfigParser
 except ImportError:
 	from configparser import ConfigParser
 import xml.etree.ElementTree as ET
@@ -310,7 +310,7 @@ def main():
 	defValMap = getPropertiesConfigMap(installFileName)
 
 
-	for wk,wv in webconfig.items():
+	for wk,wv in list(webconfig.items()):
 		nk = "ranger." + wk
 		nk = nk.replace('.','_')
 		installProps[nk] = wv

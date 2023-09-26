@@ -40,11 +40,11 @@ if RANGER_KMS_HOME is None:
 
 def check_output(query):
 	if is_unix:
-		p = subprocess.Popen(shlex.split(query), stdout=subprocess.PIPE)
+		p = subprocess.Popen(shlex.split(query), stdout=subprocess.PIPE, universal_newlines=True)
 	elif os_name == "WINDOWS":
-		p = subprocess.Popen(query, stdout=subprocess.PIPE, shell=True)
-	output = p.communicate ()[0]
-	return output.decode()
+		p = subprocess.Popen(query, stdout=subprocess.PIPE, shell=True, universal_newlines=True)
+	output = p.communicate()[0]
+	return output
 
 def log(msg,type):
 	if type == 'info':

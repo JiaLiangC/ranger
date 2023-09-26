@@ -74,7 +74,7 @@ def main(argv):
 	else:
 		while os.path.isfile(JAVA_BIN) == False:
 			log("Enter java executable path: :","info")
-			JAVA_BIN=input()
+			JAVA_BIN=eval(input())
 	log("[I] Using Java:" + str(JAVA_BIN),"info")
 
 	if os_name == "LINUX":

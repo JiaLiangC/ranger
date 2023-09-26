@@ -14,9 +14,9 @@
 
 import os
 import sys
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import base64
-import httplib
+import http.client
 import json
 import time
 from xml.etree import ElementTree as ET
@@ -149,33 +149,33 @@ def create_ranger_service_components_in_ambari(ranger_service_component_name):
 		response_code = request_result.getcode()
 		response = json.loads(json.JSONEncoder().encode(request_result.read()))
 		if (response_code == 201 and response is not None):
-			print('ranger service component : ' + ranger_service_component_name + ', created successfully in ambari.')
+			print(('ranger service component : ' + ranger_service_component_name + ', created successfully in ambari.'))
 			return True
 		elif (response_code == 409 and response is not None):
-			print('ranger service component : ' + ranger_service_component_name + ',  is already present in ambari.')
+			print(('ranger service component : ' + ranger_service_component_name + ',  is already present in ambari.'))
 			return True
 		else:
-			print('ranger service component creation for : ' + ranger_service_component_name + ',  failed in ambari.')
+			print(('ranger service component creation for : ' + ranger_service_component_name + ',  failed in ambari.'))
 			return False
 
 def create_kms_service_components_in_ambari(ranger_service_component_name):
 	print('adding ranger service components in ambari')
 	ranger_service_components = '{"components":[{"ServiceComponentInfo":{"component_name":"' + ranger_service_component_name + '"}}]}'
-	print('creating ranger kms service in ambari -> ' + str(ranger_service_components))	
+	print(('creating ranger kms service in ambari -> ' + str(ranger_service_components)))	
 	ranger_service_component_create_url = ambari_service_url + '?ServiceInfo/service_name=RANGER_KMS'
-	print('ranger_service_component_create_url -> ' + str(ranger_service_component_create_url))
+	print(('ranger_service_component_create_url -> ' + str(ranger_service_component_create_url)))
 	request_result = call_ambari_api(ranger_service_component_create_url, 'POST', ambari_username_password, ranger_service_components)
 	if request_result is not None:
 		response_code = request_result.getcode()
 		response = json.loads(json.JSONEncoder().encode(request_result.read()))
 		if (response_code == 201 and response is not None):
-			print('ranger service component : ' + ranger_service_component_name + ', created successfully in ambari.')
+			print(('ranger service component : ' + ranger_service_component_name + ', created successfully in ambari.'))
 			return True
 		elif (response_code == 409 and response is not None):
-			print('ranger service component : ' + ranger_service_component_name + ',  is already present in ambari.')
+			print(('ranger service component : ' + ranger_service_component_name + ',  is already present in ambari.'))
 			return True
 		else:
-			print('ranger service component creation for : ' + ranger_service_component_name + ',  failed in ambari.')
+			print(('ranger service component creation for : ' + ranger_service_component_name + ',  failed in ambari.'))
 			return False
 
 def register_ranger_admin_host_in_ambari():
@@ -324,19 +324,19 @@ def add_advanced_ranger_configurations(add_admin_or_usersync, ranger_service_pro
 
 			print ('####################### admin_properties configuration :')
 			for each_key in advanced_admin_properties:
-				print str(each_key) + ' = ' + str(advanced_admin_properties[each_key])
+				print(str(each_key) + ' = ' + str(advanced_admin_properties[each_key]))
 
 			print ('####################### ranger_site_properties configuration :')
 			for each_key in advanced_ranger_site_properties:
-				print str(each_key) + ' = ' + str(advanced_ranger_site_properties[each_key])
+				print(str(each_key) + ' = ' + str(advanced_ranger_site_properties[each_key]))
 
 			print ('####################### ranger_env_properties configuration :')
 			for each_key in advanced_ranger_env_properties:
-				print str(each_key) + ' = ' + str(advanced_ranger_env_properties[each_key])
+				print(str(each_key) + ' = ' + str(advanced_ranger_env_properties[each_key]))
 			
 			print ('####################### ranger_admin_site_properties configuration :')
 			for each_key in advanced_ranger_env_properties:
-				print str(each_key) + ' = ' + str(advanced_ranger_env_properties[each_key])
+				print(str(each_key) + ' = ' + str(advanced_ranger_env_properties[each_key]))
 
 
 		else:
@@ -392,17 +392,17 @@ def add_advanced_ranger_configurations(add_admin_or_usersync, ranger_service_pro
 
 		print ('####################### user_sync_properties configuration :')
 		for each_key in advanced_user_sync_properties:
-			print str(each_key) + ' = ' + str(advanced_user_sync_properties[each_key])
+			print(str(each_key) + ' = ' + str(advanced_user_sync_properties[each_key]))
 
 	else:
 		print ('invalid option for to add configuration to ranger.')
 		sys.exit(1)
 
 
-	confirm_configurations = raw_input('please confirm the above configuration values y/n (n) : ')
+	confirm_configurations = input('please confirm the above configuration values y/n (n) : ')
 	if(confirm_configurations == ''):
 		confirm_configurations = 'n'
-	print ('input registered as ' + str(confirm_configurations))
+	print(('input registered as ' + str(confirm_configurations)))
 
 	if(confirm_configurations.lower() == 'y'):
 		ranger_config_request_url = ambari_cluster_url
@@ -545,46 +545,46 @@ def add_advanced_ranger_kms_configurations(ranger_kms_properties_from_file):
 
 	print ('####################### kms_properties configuration :')
 	for each_key in advanced_kms_properties:
-		print str(each_key) + ' = ' + str(advanced_kms_properties[each_key])
+		print(str(each_key) + ' = ' + str(advanced_kms_properties[each_key]))
 
 	print ('####################### kms_site_properties configuration :')
 	for each_key in advanced_kms_site_properties:
-		print str(each_key) + ' = ' + str(advanced_kms_site_properties[each_key])
+		print(str(each_key) + ' = ' + str(advanced_kms_site_properties[each_key]))
 
 	print ('####################### kms_env_properties configuration :')
 	for each_key in advanced_kms_env_properties:
-		print str(each_key) + ' = ' + str(advanced_kms_env_properties[each_key])
+		print(str(each_key) + ' = ' + str(advanced_kms_env_properties[each_key]))
 
 	print ('####################### ranger_kms_site_properties configuration :')
 	for each_key in advanced_ranger_kms_site_properties:
-		print str(each_key) + ' = ' + str(advanced_ranger_kms_site_properties[each_key])
+		print(str(each_key) + ' = ' + str(advanced_ranger_kms_site_properties[each_key]))
 
 	print ('####################### kms_dbks_site_properties configuration :')
 	for each_key in advanced_dbks_site_properties:
-		print str(each_key) + ' = ' + str(advanced_dbks_site_properties[each_key])
+		print(str(each_key) + ' = ' + str(advanced_dbks_site_properties[each_key]))
 
 	print ('####################### ranger_kms_audit_properties configuration :')
 	for each_key in advanced_ranger_kms_audit_properties:
-		print str(each_key) + ' = ' + str(advanced_ranger_kms_audit_properties[each_key])
+		print(str(each_key) + ' = ' + str(advanced_ranger_kms_audit_properties[each_key]))
 	
 	print ('####################### ranger_kms_policymgr_ssl_properties configuration :')
 	for each_key in advanced_ranger_kms_policymgr_ssl_properties:
-		print str(each_key) + ' = ' + str(advanced_ranger_kms_policymgr_ssl_properties[each_key])
+		print(str(each_key) + ' = ' + str(advanced_ranger_kms_policymgr_ssl_properties[each_key]))
 	
 	
 	print ('####################### ranger_kms_security_properties configuration :')
 	for each_key in advanced_ranger_kms_security_properties:
-		print str(each_key) + ' = ' + str(advanced_ranger_kms_security_properties[each_key])
+		print(str(each_key) + ' = ' + str(advanced_ranger_kms_security_properties[each_key]))
 	
 	print ('####################### ranger_kms_log4j_properties configuration :')
 	for each_key in advanced_kms_log4j_properties:
-		print str(each_key) + ' = ' + str(advanced_kms_log4j_properties[each_key])
+		print(str(each_key) + ' = ' + str(advanced_kms_log4j_properties[each_key]))
 
 	
-	confirm_configurations = raw_input('please confirm the above configuration values y/n (n) : ')
+	confirm_configurations = input('please confirm the above configuration values y/n (n) : ')
 	if(confirm_configurations == ''):
 		confirm_configurations = 'n'
-	print ('input registered as ' + str(confirm_configurations))
+	print(('input registered as ' + str(confirm_configurations)))
 
 	if(confirm_configurations.lower() == 'y'):
 		ranger_config_request_url = ambari_cluster_url
@@ -741,11 +741,11 @@ def get_ranger_admin_install_properties():
 				print('ranger_install_properties_path exists, getting existing properties for ambari port')
 				ranger_admin_properties_from_file = import_properties_from_file("ranger_admin_install.properties")
 				if not (ranger_admin_properties_from_file['db_root_user'] == '' or ranger_admin_properties_from_file['db_root_password'] == ''):
-					print 'db_root_username and db_root_password are not blank.'
-					print 'value for db_root_user = ' + str(ranger_admin_properties_from_file['db_root_user'])
-					print 'value for db_root_password = ' + str(ranger_admin_properties_from_file['db_root_password'])
+					print('db_root_username and db_root_password are not blank.')
+					print('value for db_root_user = ' + str(ranger_admin_properties_from_file['db_root_user']))
+					print('value for db_root_password = ' + str(ranger_admin_properties_from_file['db_root_password']))
 				else:
-					print 'db_root_username or db_root_password are blank, please provide proper values in ranger_admin_install.properties. exiting installation without any changes.'
+					print('db_root_username or db_root_password are blank, please provide proper values in ranger_admin_install.properties. exiting installation without any changes.')
 					sys.exit(1)
 
 				print('got ranger admin values from ranger_admin_install.properties file, need to configure ambari for ranger service.')
@@ -770,11 +770,11 @@ def get_ranger_kms_install_properties():
 				print('ranger_install_properties_path exists, getting existing properties for ambari port')
 				ranger_kms_properties_from_file = import_properties_from_file("ranger_admin_install.properties")
 				if not (ranger_kms_properties_from_file['db_root_user'] == '' or ranger_kms_properties_from_file['db_root_password'] == ''):
-					print 'db_root_username and db_root_password are not blank.'
-					print 'value for db_root_user = ' + str(ranger_kms_properties_from_file['db_root_user'])
-					print 'value for db_root_password = ' + str(ranger_kms_properties_from_file['db_root_password'])
+					print('db_root_username and db_root_password are not blank.')
+					print('value for db_root_user = ' + str(ranger_kms_properties_from_file['db_root_user']))
+					print('value for db_root_password = ' + str(ranger_kms_properties_from_file['db_root_password']))
 				else:
-					print 'db_root_username or db_root_password are blank, please provide proper values in ranger_admin_install.properties. exiting installation without any changes.'
+					print('db_root_username or db_root_password are blank, please provide proper values in ranger_admin_install.properties. exiting installation without any changes.')
 					sys.exit(1)
 
 				print('got ranger admin values from ranger_admin_install.properties file, need to configure ambari for ranger service.')
@@ -842,14 +842,14 @@ def get_additional_properties_for_admin(ranger_admin_properties_from_file):
         	
 		ranger_admin_properties_from_file =  import_properties_from_xml(ranger_admin_default_site_xml_properties, ranger_admin_properties_from_file)
 		ranger_admin_properties_from_file =  import_properties_from_xml(ranger_admin_site_xml_properties, ranger_admin_properties_from_file)
-        except Exception, e:
-            print "Error loading ranger-admin properties from xml files : ", str(e)
+        except Exception as e:
+            print("Error loading ranger-admin properties from xml files : ", str(e))
 
 	print('getting db flavor, library and command invoker')
 	ranger_jpa_jdbc_dialect = ranger_admin_properties_from_file['ranger.jpa.jdbc.dialect']
-	print('ranger_jpa_jdbc_dialect = ' + ranger_jpa_jdbc_dialect)
+	print(('ranger_jpa_jdbc_dialect = ' + ranger_jpa_jdbc_dialect))
 	ranger_jpa_jdbc_url = ranger_admin_properties_from_file['ranger.jpa.jdbc.url']
-	print('ranger_jpa_jdbc_url = ' + ranger_jpa_jdbc_url)
+	print(('ranger_jpa_jdbc_url = ' + ranger_jpa_jdbc_url))
 	if ('mysql'.lower() in ranger_jpa_jdbc_dialect.lower() and 'mysql'.lower() in ranger_jpa_jdbc_url.lower()):
 		print('db dialect and jdbc url are set as MYSQL setting db_flavour and sql command invoker as mysql')
 		ranger_admin_properties_from_file['DB_FLAVOR'] = 'MYSQL'
@@ -867,22 +867,22 @@ def get_additional_properties_for_admin(ranger_admin_properties_from_file):
 		sys.exit(1)
 
 	ranger_jpa_jdbc_url = ranger_admin_properties_from_file['ranger.jpa.jdbc.url']
-	print('found jdbc url configured as : ' + str(ranger_jpa_jdbc_url) + ' , getting db host from configured jdbc url')
+	print(('found jdbc url configured as : ' + str(ranger_jpa_jdbc_url) + ' , getting db host from configured jdbc url'))
 	ranger_database_host_name = ranger_jpa_jdbc_url.split(':')
 	ranger_database_host = ranger_database_host_name[3].split('/')[2]
 	ranger_database_name = ranger_database_host_name[3].split('/')[3]
-	print('found db host as : ' + str(ranger_database_host))
-	print('found db name as : ' + str(ranger_database_name))
+	print(('found db host as : ' + str(ranger_database_host)))
+	print(('found db name as : ' + str(ranger_database_name)))
 	ranger_admin_properties_from_file['db_host'] = ranger_database_host
 	ranger_admin_properties_from_file['db_name'] = ranger_database_name
 
 	ranger_audit_jdbc_url = ranger_admin_properties_from_file['ranger.jpa.audit.jdbc.url']
-	print('found audit jdbc url configured as : ' + str(ranger_audit_jdbc_url) + ' , getting db host from configured jdbc url')
+	print(('found audit jdbc url configured as : ' + str(ranger_audit_jdbc_url) + ' , getting db host from configured jdbc url'))
 	ranger_audit_database_host_name = ranger_audit_jdbc_url.split(':')
 
 	ranger_audit_database_host = ranger_audit_database_host_name[3].split('/')[2]
 	ranger_audit_database_name = ranger_audit_database_host_name[3].split('/')[3]
-	print('found ranger_audit_database_name as : ' + str(ranger_audit_database_name))
+	print(('found ranger_audit_database_name as : ' + str(ranger_audit_database_name)))
 	ranger_admin_properties_from_file['audit_db_host'] = ranger_audit_database_host
 	ranger_admin_properties_from_file['audit_db_name'] = ranger_audit_database_name
 
@@ -933,7 +933,7 @@ def get_additional_properties_for_kms(ranger_kms_properties_from_file):
 	ranger_kms_properties_from_file['kms.log4j.properties'] = read_properties_file(kms_log4j_properties)
 	
 	kms_jpa_jdbc_dialect = ranger_kms_properties_from_file['ranger.ks.jpa.jdbc.dialect']
-	print('kms_jpa_jdbc_dialect = ' + str(kms_jpa_jdbc_dialect))
+	print(('kms_jpa_jdbc_dialect = ' + str(kms_jpa_jdbc_dialect)))
 	kms_jpa_jdbc_url = ranger_kms_properties_from_file['ranger.ks.jpa.jdbc.url']
 	if ('mysql'.lower() in kms_jpa_jdbc_dialect.lower() and 'mysql'.lower() in kms_jpa_jdbc_url.lower()):
 		print('db dialect and jdbc url are set as MYSQL setting db_flavour and sql command invoker as mysql')
@@ -955,8 +955,8 @@ def get_additional_properties_for_kms(ranger_kms_properties_from_file):
 	
 	kms_jpa_jdbc_hostname = kms_jpa_db_hostname[3].split('/')[2]
 	kms_jpa_jdbc_db_name = kms_jpa_db_hostname[3].split('/')[3]
-	print('found db hostname = ' + kms_jpa_jdbc_hostname )
-	print('found db name = ' + kms_jpa_jdbc_db_name )
+	print(('found db hostname = ' + kms_jpa_jdbc_hostname ))
+	print(('found db name = ' + kms_jpa_jdbc_db_name ))
 	
 	ranger_kms_properties_from_file['db_host'] = kms_jpa_jdbc_hostname
 	ranger_kms_properties_from_file['db_name'] = kms_jpa_jdbc_db_name
@@ -978,7 +978,7 @@ def get_additional_properties_for_kms(ranger_kms_properties_from_file):
 	statuscode, value = call_keystore(libpath, aliasKey, aliasValue, filepath, getorcreateorlist)
 	if statuscode == 0:
 		kms_database_password = value.strip()
-	print('kms_database_password = ' + kms_database_password)
+	print(('kms_database_password = ' + kms_database_password))
 	aliasKey = ranger_kms_properties_from_file['ranger.ks.masterkey.credential.alias']
 	if(aliasKey is None or len(aliasKey) == 0):
 		aliasKey = 'ranger.ks.masterkey.password'
@@ -987,7 +987,7 @@ def get_additional_properties_for_kms(ranger_kms_properties_from_file):
 	if statuscode == 0:
 		kms_keystore_masterkey_password = value.strip()
 	
-	print('kms_keystore_masterkey_password = ' + kms_keystore_masterkey_password)
+	print(('kms_keystore_masterkey_password = ' + kms_keystore_masterkey_password))
 
 	if str(ranger_kms_properties_from_file['ranger.ks.jpa.jdbc.password']) == '_' or str(ranger_kms_properties_from_file['ranger.ks.jpa.jdbc.password']).lower() == 'crypted':
 		ranger_kms_properties_from_file['ranger.ks.jpa.jdbc.password'] = kms_database_password
@@ -1075,28 +1075,28 @@ def port_ranger_hdfs_plugin_to_ambari():
 
 		print ('####################### hdfs_site_xml configuration :')
 		for each_key in hdfs_site_xml_properties:
-			print str(each_key) + ' = ' + str(hdfs_site_xml_properties[each_key])
+			print(str(each_key) + ' = ' + str(hdfs_site_xml_properties[each_key]))
 
 		print ('####################### ranger_hdfs_plugin_properties configuration :')
 		for each_key in advanced_ranger_hdfs_plugin_properties:
-			print str(each_key) + ' = ' + str(advanced_ranger_hdfs_plugin_properties[each_key])
+			print(str(each_key) + ' = ' + str(advanced_ranger_hdfs_plugin_properties[each_key]))
 
 		print ('####################### ranger_hdfs_audit_properties configuration :')
 		for each_key in advanced_ranger_hdfs_audit_properties:
-			print str(each_key) + ' = ' + str(advanced_ranger_hdfs_audit_properties[each_key])
+			print(str(each_key) + ' = ' + str(advanced_ranger_hdfs_audit_properties[each_key]))
 
 		print ('####################### ranger_hdfs_policymgr_ssl_properties configuration :')
 		for each_key in advanced_ranger_hdfs_policymgr_ssl_properties:
-			print str(each_key) + ' = ' + str(advanced_ranger_hdfs_policymgr_ssl_properties[each_key])
+			print(str(each_key) + ' = ' + str(advanced_ranger_hdfs_policymgr_ssl_properties[each_key]))
 
 		print ('####################### ranger_hdfs_security_properties configuration :')
 		for each_key in advanced_ranger_hdfs_security_properties:
-			print str(each_key) + ' = ' + str(advanced_ranger_hdfs_security_properties[each_key])
+			print(str(each_key) + ' = ' + str(advanced_ranger_hdfs_security_properties[each_key]))
 
-		confirm_configurations = raw_input('please confirm the above configuration values y/n (n) : ')
+		confirm_configurations = input('please confirm the above configuration values y/n (n) : ')
 		if(confirm_configurations == ''):
 			confirm_configurations = 'n'
-		print ('Input registered as ' + str(confirm_configurations))
+		print(('Input registered as ' + str(confirm_configurations)))
 
 
 		if(confirm_configurations.lower() == 'y'):
@@ -1180,29 +1180,29 @@ def port_ranger_yarn_plugin_to_ambari():
 		
 		print ('####################### yarn_site_xml configuration :')
 		for each_key in yarn_site_xml_properties:
-			print str(each_key) + ' = ' + str(yarn_site_xml_properties[each_key])
+			print(str(each_key) + ' = ' + str(yarn_site_xml_properties[each_key]))
 
 		print ('####################### ranger_yarn_plugin_properties configuration :')
 		for each_key in advanced_ranger_yarn_plugin_properties:
-			print str(each_key) + ' = ' + str(advanced_ranger_yarn_plugin_properties[each_key])
+			print(str(each_key) + ' = ' + str(advanced_ranger_yarn_plugin_properties[each_key]))
 
 		print ('####################### ranger_yarn_audit_properties configuration :')
 		for each_key in advanced_ranger_yarn_audit_properties:
-			print str(each_key) + ' = ' + str(advanced_ranger_yarn_audit_properties[each_key])
+			print(str(each_key) + ' = ' + str(advanced_ranger_yarn_audit_properties[each_key]))
 
 		print ('####################### ranger_yarn_policymgr_ssl_properties configuration :')
 		for each_key in advanced_ranger_yarn_policymgr_ssl_properties:
-			print str(each_key) + ' = ' + str(advanced_ranger_yarn_policymgr_ssl_properties[each_key])
+			print(str(each_key) + ' = ' + str(advanced_ranger_yarn_policymgr_ssl_properties[each_key]))
 
 		print ('####################### ranger_hdfs_security_properties configuration :')
 		for each_key in advanced_ranger_yarn_security_properties:
-			print str(each_key) + ' = ' + str(advanced_ranger_yarn_security_properties[each_key])
+			print(str(each_key) + ' = ' + str(advanced_ranger_yarn_security_properties[each_key]))
 		
 		
-		confirm_configurations = raw_input('please confirm the above configuration values y/n (n) : ')
+		confirm_configurations = input('please confirm the above configuration values y/n (n) : ')
 		if(confirm_configurations == ''):
 			confirm_configurations = 'n'
-		print ('Input registered as ' + str(confirm_configurations))
+		print(('Input registered as ' + str(confirm_configurations)))
 		
 		if(confirm_configurations.lower() == 'y'):
 			ranger_config_request_url = ambari_cluster_url
@@ -1300,37 +1300,37 @@ def port_ranger_hive_plugin_to_ambari():
 
 		print ('####################### hive_server2_xml configuration :')
 		for each_key in hive_server2_xml_properties:
-			print str(each_key) + ' = ' + str(hive_server2_xml_properties[each_key])
+			print(str(each_key) + ' = ' + str(hive_server2_xml_properties[each_key]))
 
 		print ('####################### ranger_hive_plugin_properties configuration :')
 		for each_key in advanced_ranger_hive_plugin_properties:
-			print str(each_key) + ' = ' + str(advanced_ranger_hive_plugin_properties[each_key])
+			print(str(each_key) + ' = ' + str(advanced_ranger_hive_plugin_properties[each_key]))
 
 		print ('####################### ranger_hive_audit_properties configuration :')
 		for each_key in advanced_ranger_hive_audit_properties:
-			print str(each_key) + ' = ' + str(advanced_ranger_hive_audit_properties[each_key])
+			print(str(each_key) + ' = ' + str(advanced_ranger_hive_audit_properties[each_key]))
 
 		print ('####################### ranger_hive_policymgr_ssl configuration :')
 		for each_key in advanced_ranger_hive_policymgr_ssl_properties:
-			print str(each_key) + ' = ' + str(advanced_ranger_hive_policymgr_ssl_properties[each_key])
+			print(str(each_key) + ' = ' + str(advanced_ranger_hive_policymgr_ssl_properties[each_key]))
 
 		print ('####################### ranger_hive_security_properties configuration :')
 		for each_key in advanced_ranger_hive_security_properties:
-			print str(each_key) + ' = ' + str(advanced_ranger_hive_security_properties[each_key])
+			print(str(each_key) + ' = ' + str(advanced_ranger_hive_security_properties[each_key]))
 
 		print ('####################### ranger_hive_env_properties configuration :')
 		for each_key in hive_env_properties:
-			print str(each_key) + ' = ' + str(hive_env_properties[each_key])
+			print(str(each_key) + ' = ' + str(hive_env_properties[each_key]))
 
 		print ('####################### ranger_hive_site_properties configuration :')
 		for each_key in hive_site_properties:
-			print str(each_key) + ' = ' + str(hive_site_properties[each_key])
+			print(str(each_key) + ' = ' + str(hive_site_properties[each_key]))
 
 
-		confirm_configurations = raw_input('please confirm the above configuration values y/n (n) : ')
+		confirm_configurations = input('please confirm the above configuration values y/n (n) : ')
 		if(confirm_configurations == ''):
 			confirm_configurations = 'n'
-		print ('Input registered as ' + str(confirm_configurations))
+		print(('Input registered as ' + str(confirm_configurations)))
 
 
 		if(confirm_configurations.lower() == 'y'):
@@ -1415,28 +1415,28 @@ def port_ranger_hbase_plugin_to_ambari():
 
 		print ('####################### hbase_site_xml configuration :')
 		for each_key in hbase_site_xml_properties:
-			print str(each_key) + ' = ' + str(hbase_site_xml_properties[each_key])
+			print(str(each_key) + ' = ' + str(hbase_site_xml_properties[each_key]))
 
 		print ('####################### ranger_hbase_plugin_properties configuration :')
 		for each_key in advanced_ranger_hbase_plugin_properties:
-			print str(each_key) + ' = ' + str(advanced_ranger_hbase_plugin_properties[each_key])
+			print(str(each_key) + ' = ' + str(advanced_ranger_hbase_plugin_properties[each_key]))
 
 		print ('####################### ranger_hbase_audit_properties configuration :')
 		for each_key in advanced_ranger_hbase_audit_properties:
-			print str(each_key) + ' = ' + str(advanced_ranger_hbase_audit_properties[each_key])
+			print(str(each_key) + ' = ' + str(advanced_ranger_hbase_audit_properties[each_key]))
 
 		print ('####################### ranger_hbase_policymgr_ssl_properties configuration :')
 		for each_key in advanced_ranger_hbase_policymgr_ssl_properties:
-			print str(each_key) + ' = ' + str(advanced_ranger_hbase_policymgr_ssl_properties[each_key])
+			print(str(each_key) + ' = ' + str(advanced_ranger_hbase_policymgr_ssl_properties[each_key]))
 
 		print ('####################### ranger_hbase_security_properties configuration :')
 		for each_key in advanced_ranger_hbase_security_properties:
-			print str(each_key) + ' = ' + str(advanced_ranger_hbase_security_properties[each_key])
+			print(str(each_key) + ' = ' + str(advanced_ranger_hbase_security_properties[each_key]))
 
-		confirm_configurations = raw_input('please confirm the above configuration values y/n (n) : ')
+		confirm_configurations = input('please confirm the above configuration values y/n (n) : ')
 		if(confirm_configurations == ''):
 			confirm_configurations = 'n'
-		print ('Input registered as ' + str(confirm_configurations))
+		print(('Input registered as ' + str(confirm_configurations)))
 
 
 		if(confirm_configurations.lower() == 'y'):
@@ -1519,24 +1519,24 @@ def port_ranger_knox_plugin_to_ambari():
 
 		print ('####################### ranger_knox_plugin_properties configuration :')
 		for each_key in advanced_ranger_knox_plugin_properties:
-			print str(each_key) + ' = ' + str(advanced_ranger_knox_plugin_properties[each_key])
+			print(str(each_key) + ' = ' + str(advanced_ranger_knox_plugin_properties[each_key]))
 
 		print ('####################### ranger_knox_audit_properties configuration :')
 		for each_key in advanced_ranger_knox_audit_properties:
-			print str(each_key) + ' = ' + str(advanced_ranger_knox_audit_properties[each_key])
+			print(str(each_key) + ' = ' + str(advanced_ranger_knox_audit_properties[each_key]))
 
 		print ('####################### ranger_knox_policymgr_ssl_properties configuration :')
 		for each_key in advanced_ranger_knox_policymgr_ssl_properties:
-			print str(each_key) + ' = ' + str(advanced_ranger_knox_policymgr_ssl_properties[each_key])
+			print(str(each_key) + ' = ' + str(advanced_ranger_knox_policymgr_ssl_properties[each_key]))
 
 		print ('####################### ranger_knox_security_properties configuration :')
 		for each_key in advanced_ranger_knox_security_properties:
-			print str(each_key) + ' = ' + str(advanced_ranger_knox_security_properties[each_key])
+			print(str(each_key) + ' = ' + str(advanced_ranger_knox_security_properties[each_key]))
 
-		confirm_configurations = raw_input('please confirm the above configuration values y/n (n) : ')
+		confirm_configurations = input('please confirm the above configuration values y/n (n) : ')
 		if(confirm_configurations == ''):
 			confirm_configurations = 'n'
-		print ('input registered as ' + str(confirm_configurations))
+		print(('input registered as ' + str(confirm_configurations)))
 
 
 		if(confirm_configurations.lower() == 'y'):
@@ -1623,26 +1623,26 @@ def port_ranger_storm_plugin_to_ambari():
 
 		print ('####################### ranger_storm_plugin_properties configuration :')
 		for each_key in advanced_ranger_storm_plugin_properties:
-			print str(each_key) + ' = ' + str(advanced_ranger_storm_plugin_properties[each_key])
+			print(str(each_key) + ' = ' + str(advanced_ranger_storm_plugin_properties[each_key]))
 
 		print ('####################### ranger_storm_audit_properties configuration :')
 		for each_key in advanced_ranger_storm_audit_properties:
-			print str(each_key) + ' = ' + str(advanced_ranger_storm_audit_properties[each_key])
+			print(str(each_key) + ' = ' + str(advanced_ranger_storm_audit_properties[each_key]))
 
 		print ('####################### ranger_storm_policymgr_ssl_properties configuration :')
 		for each_key in advanced_ranger_storm_policymgr_ssl_properties:
-			print str(each_key) + ' = ' + str(advanced_ranger_storm_policymgr_ssl_properties[each_key])
+			print(str(each_key) + ' = ' + str(advanced_ranger_storm_policymgr_ssl_properties[each_key]))
 
 		print ('####################### ranger_storm_security_properties configuration :')
 		for each_key in advanced_ranger_storm_security_properties:
-			print str(each_key) + ' = ' + str(advanced_ranger_storm_security_properties[each_key])
+			print(str(each_key) + ' = ' + str(advanced_ranger_storm_security_properties[each_key]))
 
 		
 
-		confirm_configurations = raw_input('please confirm the above configuration values y/n (n) : ')
+		confirm_configurations = input('please confirm the above configuration values y/n (n) : ')
 		if(confirm_configurations == ''):
 			confirm_configurations = 'n'
-		print ('Input registered as ' + str(confirm_configurations))
+		print(('Input registered as ' + str(confirm_configurations)))
 
 
 		if(confirm_configurations.lower() == 'y'):
@@ -1734,33 +1734,33 @@ def port_ranger_kafka_plugin_to_ambari():
 		
 		print ('####################### kafka_broker_properties configuration :')
 		for each_key in advanced_kafka_broker_properties:
-			print str(each_key) + ' = ' + str(advanced_kafka_broker_properties[each_key])
+			print(str(each_key) + ' = ' + str(advanced_kafka_broker_properties[each_key]))
 
 		print ('####################### kafka_log4j_properties configuration :')
 		for each_key in advanced_kafka_log4j_properties:
-			print str(each_key) + ' = ' + str(advanced_kafka_log4j_properties[each_key])
+			print(str(each_key) + ' = ' + str(advanced_kafka_log4j_properties[each_key]))
 
 		
 		print ('####################### ranger_kafka_plugin_properties configuration :')
 		for each_key in advanced_ranger_kafka_plugin_properties:
-			print str(each_key) + ' = ' + str(advanced_ranger_kafka_plugin_properties[each_key])
+			print(str(each_key) + ' = ' + str(advanced_ranger_kafka_plugin_properties[each_key]))
 
 		print ('####################### ranger_kafka_audit_properties configuration :')
 		for each_key in advanced_ranger_kafka_audit_properties:
-			print str(each_key) + ' = ' + str(advanced_ranger_kafka_audit_properties[each_key])
+			print(str(each_key) + ' = ' + str(advanced_ranger_kafka_audit_properties[each_key]))
 
 		print ('####################### ranger_kafka_policymgr_ssl_properties configuration :')
 		for each_key in advanced_ranger_kafka_policymgr_ssl_properties:
-			print str(each_key) + ' = ' + str(advanced_ranger_kafka_policymgr_ssl_properties[each_key])
+			print(str(each_key) + ' = ' + str(advanced_ranger_kafka_policymgr_ssl_properties[each_key]))
 
 		print ('####################### ranger_kafka_security_properties configuration :')
 		for each_key in advanced_ranger_kafka_security_properties:
-			print str(each_key) + ' = ' + str(advanced_ranger_kafka_security_properties[each_key])
+			print(str(each_key) + ' = ' + str(advanced_ranger_kafka_security_properties[each_key]))
 
-		confirm_configurations = raw_input('please confirm the above configuration values y/n (n) : ')
+		confirm_configurations = input('please confirm the above configuration values y/n (n) : ')
 		if(confirm_configurations == ''):
 			confirm_configurations = 'n'
-		print ('input registered as ' + str(confirm_configurations))
+		print(('input registered as ' + str(confirm_configurations)))
 
 
 		if(confirm_configurations.lower() == 'y'):
@@ -1858,14 +1858,14 @@ def get_hive_configs_from_ambari():
 	
 	hive_env_properties_url = ambari_cluster_url + '/configurations?type=hive-env&tag='+hive_env_tag
 	hive_env_properties_response = None
-	print ('hive_env_properties_url = ' + str(hive_env_properties_url))
+	print(('hive_env_properties_url = ' + str(hive_env_properties_url)))
 	request_result = call_ambari_api(hive_env_properties_url,'GET',ambari_username_password,None)
 	if request_result is not None:
 		response_code = request_result.getcode()
 		hive_env_properties_response = json.loads(json.JSONEncoder().encode(request_result.read()))
-	print 'hive-env len response = ' , len(json.loads(hive_env_properties_response)['items'])
+	print('hive-env len response = ' , len(json.loads(hive_env_properties_response)['items']))
 	hive_env_properties =  json.loads(hive_env_properties_response)['items'][0]['properties']
-	print ('hive_env_properties = ' + str(hive_env_properties))
+	print(('hive_env_properties = ' + str(hive_env_properties)))
 	
 	hive_site_properties_url = ambari_cluster_url + '/configurations?type=hive-site&tag='+hive_site_tag
 	hive_site_properties_response = None
@@ -1873,9 +1873,9 @@ def get_hive_configs_from_ambari():
 	if request_result is not None:
 		response_code = request_result.getcode()
 		hive_site_properties_response = json.loads(json.JSONEncoder().encode(request_result.read()))
-	print 'hive-site len response = ' , len(json.loads(hive_site_properties_response)['items'])
+	print('hive-site len response = ' , len(json.loads(hive_site_properties_response)['items']))
 	hive_site_properties =  json.loads(hive_site_properties_response)['items'][0]['properties']
-	print ('hive_site_properties = ' + str(hive_site_properties))
+	print(('hive_site_properties = ' + str(hive_site_properties)))
 		
 	return hive_env_properties,hive_site_properties
 
@@ -1945,7 +1945,7 @@ def get_storm_configs_from_ambari():
 		desired_configs_response = json.loads(json.JSONEncoder().encode(request_result.read()))
 	
 	storm_site_tag = str(json.loads(desired_configs_response)['Clusters']['desired_configs']['storm-site']['tag'])
-	print ('storm_site_tag = ' + storm_site_tag)
+	print(('storm_site_tag = ' + storm_site_tag))
 
 	kafka_broker_properties_url = ambari_cluster_url + '/configurations?type=storm-site&tag='+storm_site_tag
 
@@ -1953,9 +1953,9 @@ def get_storm_configs_from_ambari():
 	if request_result is not None:
 		response_code = request_result.getcode()
 		response = json.loads(json.JSONEncoder().encode(request_result.read()))
-	print 'storm-site len response = ' , len(json.loads(response)['items'])
+	print('storm-site len response = ' , len(json.loads(response)['items']))
 	storm_site_properties =  json.loads(response)['items'][0]['properties']
-	print ('storm_site_properties = ' + str(storm_site_properties))
+	print(('storm_site_properties = ' + str(storm_site_properties)))
 	
 	return storm_site_properties
 
@@ -1991,7 +1991,7 @@ def get_kafka_configs_from_ambari():
 		desired_configs_response = json.loads(json.JSONEncoder().encode(request_result.read()))
 
 	kafka_broker_tag = str(json.loads(desired_configs_response)['Clusters']['desired_configs']['kafka-broker']['tag'])
-	print ('kafka_broker_tag = ' + kafka_broker_tag)
+	print(('kafka_broker_tag = ' + kafka_broker_tag))
 
 	kafka_broker_properties_url = ambari_cluster_url + '/configurations?type=kafka-broker&tag='+kafka_broker_tag
 
@@ -1999,9 +1999,9 @@ def get_kafka_configs_from_ambari():
 	if request_result is not None:
 		response_code = request_result.getcode()
 		response = json.loads(json.JSONEncoder().encode(request_result.read()))
-	print 'kafka-broker len response = ' , len(json.loads(response)['items'])
+	print('kafka-broker len response = ' , len(json.loads(response)['items']))
 	kafka_broker_properties =  json.loads(response)['items'][0]['properties']
-	print ('kafka_broker_properties = ' + str(kafka_broker_properties))
+	print(('kafka_broker_properties = ' + str(kafka_broker_properties)))
 	
 	return kafka_broker_properties
 
@@ -2012,9 +2012,9 @@ def check_plugin_enabled(component_name, component_plugin_install_properties):
 	repository_key = 'ranger.plugin.' + component_name +  '.service.name'
 	if not (str(component_plugin_install_properties[repository_key]).strip() == ''):
 		repo_base_path = os.path.join('/etc/ranger', component_plugin_install_properties[repository_key])
-		print('repo_base_path = ' + str(repo_base_path))
+		print(('repo_base_path = ' + str(repo_base_path)))
 		if os.path.exists(repo_base_path):
-			print('Plugin is installed for component ' + component_name)
+			print(('Plugin is installed for component ' + component_name))
 			flag_plugin_installed = True
 	return flag_plugin_installed
 
@@ -2024,21 +2024,21 @@ def call_ambari_api(ambari_url, method, username_password, data):
 		url = ambari_url
 		base64string = base64.encodestring('{0}'.format(username_password)).replace('\n', '')
 		headers = {"X-Requested-By": "ambari"}
-		request = urllib2.Request(url, data, headers, 'compressed')
+		request = urllib.request.Request(url, data, headers, 'compressed')
 		request.get_method = lambda: method
 		request.add_header("Authorization", "Basic {0}".format(base64string))
-		result = urllib2.urlopen(request)
+		result = urllib.request.urlopen(request)
 		return result
-	except urllib2.URLError, e:
-		if isinstance(e, urllib2.HTTPError):
-			print("HTTP Code: {0}".format(e.code))
-			print("HTTP Data: {0}".format(e.read()))
+	except urllib.error.URLError as e:
+		if isinstance(e, urllib.error.HTTPError):
+			print(("HTTP Code: {0}".format(e.code)))
+			print(("HTTP Data: {0}".format(e.read())))
 			return e
 		else:
-			print("Error: {0}".format(e.reason))
+			print(("Error: {0}".format(e.reason)))
 			print ('ambari server is not reachable, please make sure valid ambari server url has been provided and ambari server is started.')
 			return e
-	except httplib.BadStatusLine:
+	except http.client.BadStatusLine:
 		print("ambari service is not reachable, please restart the service and then try again")
 		return None
 
@@ -2060,7 +2060,7 @@ def import_properties_from_file(install_properties_path, properties_from_file=No
 			value = value.strip()
 			properties_from_file[key] = value
 	else:
-		print('Property file not found at path : ' + str(install_properties_path))
+		print(('Property file not found at path : ' + str(install_properties_path)))
 	return properties_from_file
 
 def read_properties_file(properties_file_path):
@@ -2069,13 +2069,13 @@ def read_properties_file(properties_file_path):
 		print('property file exists reading file content')
 		file_text = open(properties_file_path,'r').read()
 	else:
-		print('file not found at path : ' + str(properties_file_path))
+		print(('file not found at path : ' + str(properties_file_path)))
 	return file_text
 		
 
 
 def import_properties_from_xml(xml_path, properties_from_xml=None):
-	print('getting values from file : ' + str(xml_path))
+	print(('getting values from file : ' + str(xml_path)))
 	if os.path.isfile(xml_path):
 		xml = ET.parse(xml_path)
 		root = xml.getroot()
@@ -2086,7 +2086,7 @@ def import_properties_from_xml(xml_path, properties_from_xml=None):
 			value = child.find("value").text.strip() if child.find("value").text is not None  else ""
 			properties_from_xml[name] = value
 	else:
-		print('XML file not found at path : ' + str(xml_path))
+		print(('XML file not found at path : ' + str(xml_path)))
 	return properties_from_xml
 
 
@@ -2094,7 +2094,7 @@ def get_authentication_method():
 	print('Getting authentication method for ranger services')
 	ranger_conf_path = '/etc/ranger/admin/conf'
 	security_appln_context_path = os.path.join(ranger_conf_path,'security-applicationContext.xml')
-	print ('security_appln_context_path = ' + security_appln_context_path)
+	print(('security_appln_context_path = ' + security_appln_context_path))
 	app_context_xml_tree = ET.parse(security_appln_context_path)
 	app_context_xml_root = app_context_xml_tree.getroot()
 	reference_auth_method = None
@@ -2152,15 +2152,15 @@ def get_hdp_version():
 		output = Popen(command_to_run, stdin=PIPE, stdout=PIPE, stderr=PIPE, shell=True)
 		return_code, error = output.communicate()
 		statuscode = output.returncode
-	except Exception, e:
-		print('Error : ' + str(e))
+	except Exception as e:
+		print(('Error : ' + str(e)))
 	if statuscode == 0:
 		hdp_version = re.sub('hadoop-client - ', '', return_code)
 		hdp_version = hdp_version.rstrip()
 		match = re.match('[0-9]+.[0-9]+.[0-9]+.[0-9]+-[0-9]+', hdp_version)
-		print ('hdp_version = ' + hdp_version)
+		print(('hdp_version = ' + hdp_version))
 	else:
-		print('Unable to determine the current version because of a non-zero return code of {0}'.format(str(return_code)))
+		print(('Unable to determine the current version because of a non-zero return code of {0}'.format(str(return_code))))
 
 	if match is None:
 		print('Failed to get extracted version')
@@ -2178,13 +2178,13 @@ if __name__ == '__main__':
 	if len(sys.argv) > 1:
 		function_to_call = sys.argv[1] if len(sys.argv) > 1  else None
 		base_url = sys.argv[2] if len(sys.argv) > 2  else None
-		print ('base url = ' + base_url)
+		print(('base url = ' + base_url))
 		ambari_username_password = sys.argv[3] if len(sys.argv) > 3  else None
-		print ('ambari_username_password = ' + ambari_username_password)
+		print(('ambari_username_password = ' + ambari_username_password))
 		cluster_name = sys.argv[4] if len(sys.argv) > 4  else None
-		print ('cluster_name = ' + cluster_name)
+		print(('cluster_name = ' + cluster_name))
 		ranger_admin_fqdn = sys.argv[5] if len(sys.argv) > 5 else None
-		print ('ranger_admin_fqdn = ' + ranger_admin_fqdn)
+		print(('ranger_admin_fqdn = ' + ranger_admin_fqdn))
 		ranger_service_name = 'RANGER'
 		admin_component_name = 'RANGER_ADMIN'
 		usersync_component_name = 'RANGER_USERSYNC'
@@ -2193,10 +2193,10 @@ if __name__ == '__main__':
 		hdp_dir = os.path.join('/usr', 'hdp')
 		hdp_current_dir = os.path.join(hdp_dir, 'current')
 		hdp_version = get_hdp_version()
-		print('Found hdp_version = ' + str(hdp_version))
+		print(('Found hdp_version = ' + str(hdp_version)))
 		hdp_version_dir = os.path.join(hdp_dir, hdp_version)
 		if function_to_call is not None and len(function_to_call) > 0:
-			print('Found first argument as : ' + function_to_call)
+			print(('Found first argument as : ' + function_to_call))
 			function_to_call = int(function_to_call)
 			if function_to_call == 1:
 				print('Porting ranger admin installation details to ambari.')

@@ -15,15 +15,15 @@
 # limitations under the License.
 
 try:
-	from StringIO import StringIO
+	from io import StringIO
 except ImportError:
 	from io import StringIO
 try:
-	from ConfigParser import ConfigParser
+	from configparser import ConfigParser
 except ImportError:
 	from configparser import ConfigParser
 try:
-	from urlparse import urlparse
+	from urllib.parse import urlparse
 except ImportError:
 	from urllib.parse import urlparse
 import re
@@ -129,7 +129,7 @@ def archiveFile(originalFileName):
     archiveDir = dirname(originalFileName)
     archiveFileName = "." + basename(originalFileName) + "." + (strftime("%d%m%Y%H%M%S", localtime()))
     movedFileName = join(archiveDir,archiveFileName)
-    print("INFO: moving [%s] to [%s] ......." % (originalFileName,movedFileName))
+    print(("INFO: moving [%s] to [%s] ......." % (originalFileName,movedFileName)))
     os.rename(originalFileName, movedFileName)
 
 def getXMLConfigKeys(xmlFileName):
@@ -201,7 +201,7 @@ def writeXMLUsingProperties(xmlTemplateFileName,prop,xmlOutputFileName):
 							newName.text = TAGSYNC_INSTALL_PROP_PREFIX_FOR_ATLAS_RANGER_MAPPING + str(parts[1]) + TAGSYNC_ATLAS_CLUSTER_IDENTIFIER + str(parts[0]) + TAGSYNC_INSTALL_PROP_SUFFIX_FOR_ATLAS_RANGER_MAPPING
 							newValue.text = str(parts[2])
 						else:
-							print("ERROR: incorrect syntax for %s, value=%s" % (TAGSYNC_ATLAS_TO_RANGER_SERVICE_MAPPING, multiValues[index]))
+							print(("ERROR: incorrect syntax for %s, value=%s" % (TAGSYNC_ATLAS_TO_RANGER_SERVICE_MAPPING, multiValues[index])))
 						index += 1
 				root.remove(config)
 			else:
@@ -219,7 +219,7 @@ def updatePropertyInJCKSFile(jcksFileName,propName,value):
 	cmd = "java -cp './lib/*' %s create '%s' -value '%s' -provider jceks://file%s 2>&1" % (credUpdateClassName,propName,value,fn)
 	ret = os.system(cmd)
 	if (ret != 0):
-		print("ERROR: Unable to update the JCKSFile (%s) for aliasName (%s)" % (fn,propName))
+		print(("ERROR: Unable to update the JCKSFile (%s) for aliasName (%s)" % (fn,propName)))
 		sys.exit(1)
 	return ret
 
@@ -233,7 +233,7 @@ def convertInstallPropsToXML(props):
 	atlas_principal = ''
 	atlas_keytab = ''
 
-	for k,v in props.items():
+	for k,v in list(props.items()):
 		if (k in list(directKeyMap)):
 			newKey = directKeyMap[k]
 			if (k == TAGSYNC_ATLAS_KAFKA_ENDPOINTS_KEY):
@@ -253,7 +253,7 @@ def convertInstallPropsToXML(props):
 			else:
 				ret[newKey] = v
 		else:
-			print("INFO: Direct Key not found:%s" % (k))
+			print(("INFO: Direct Key not found:%s" % (k)))
 
 	if (configure_security):
 		atlasOutFile.write("atlas.jaas.KafkaClient.loginModuleName = com.sun.security.auth.module.Krb5LoginModule" + "\n")
@@ -284,26 +284,26 @@ def createUser(username,groupname):
 	cmd = "useradd -g %s %s -m" % (groupname,username)
 	ret = os.system(cmd)
 	if (ret != 0):
-		print("ERROR: os command execution (%s) failed. error code = %d " % (cmd, ret))
+		print(("ERROR: os command execution (%s) failed. error code = %d " % (cmd, ret)))
 		sys.exit(1)
 	try:
 		ret = pwd.getpwnam(username).pw_uid
 		return ret
 	except KeyError as e:
-		print("ERROR: Unable to create a new user account: %s with group %s - error [%s]" % (username,groupname,e))
+		print(("ERROR: Unable to create a new user account: %s with group %s - error [%s]" % (username,groupname,e)))
 		sys.exit(1)
 
 def createGroup(groupname):
 	cmd = "groupadd %s" % (groupname)
 	ret = os.system(cmd)
 	if (ret != 0):
-		print("ERROR: os command execution (%s) failed. error code = %d " % (cmd, ret))
+		print(("ERROR: os command execution (%s) failed. error code = %d " % (cmd, ret)))
 		sys.exit(1)
 	try:
 		ret = grp.getgrnam(groupname).gr_gid
 		return ret
 	except KeyError as e:
-		print("ERROR: Unable to create a new group: %s" % (groupname,e))
+		print(("ERROR: Unable to create a new group: %s" % (groupname,e)))
 		sys.exit(1)
 
 def initializeInitD():
@@ -330,7 +330,7 @@ def initializeInitD():
 def write_env_files(exp_var_name, log_path, file_name):
         final_path = "{0}/{1}".format(confBaseDirName,file_name)
         if not os.path.isfile(final_path):
-            print("INFO: Creating %s file" % file_name)
+            print(("INFO: Creating %s file" % file_name))
         f = open(final_path, "w")
         f.write("export {0}={1}".format(exp_var_name,log_path))
         f.close()
@@ -521,9 +521,9 @@ def main():
 	if rangerTagsync_password != "" :
 		output = os.system(cmd)
 		if (output == 0):
-			print("[I] Successfully updated password of " + rangerTagsync_name +" user")
+			print(("[I] Successfully updated password of " + rangerTagsync_name +" user"))
 		else:
-			print("[ERROR] Unable to change password of " + rangerTagsync_name +" user.")
+			print(("[ERROR] Unable to change password of " + rangerTagsync_name +" user."))
 	print("\nINFO: Completed ranger-tagsync installation.....\n")
 
 main()

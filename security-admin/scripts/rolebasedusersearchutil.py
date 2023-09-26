@@ -78,7 +78,7 @@ def main(argv):
     else:
         while os.path.isfile(JAVA_BIN) == False:
             log("Enter java executable path: :","info")
-            JAVA_BIN=input()
+            JAVA_BIN=eval(input())
     log("[I] Using Java:" + str(JAVA_BIN),"info")
     userName = ""
     password = ""
@@ -90,9 +90,9 @@ def main(argv):
 
     if len(argv) == 1:
         log("[I] " +msgPrompt + " or \n" + msgCommand + "\n " +msgRoleList, "info")
-        userName = input('Enter a user name: ')
+        userName = eval(input('Enter a user name: '))
         password = getpass.getpass('Enter a user password:')
-        userRole = input('Enter a role: ')
+        userRole = eval(input('Enter a role: '))
     elif len(argv) > 1 and len(argv) < 8 :
         for i in range(1, len(sys.argv)) :
             if sys.argv[i] == "-u" :
@@ -131,11 +131,11 @@ def main(argv):
     if userNameMsgFlag == True or  passwordMsgFlag == True or userRoleMsgFlag == True :
         log("[I] "+msgPrompt + " or \n" + msgCommand + "\n  " +msgRoleList, "info")
     if userNameMsgFlag == True :
-        userName = input('Enter a user name: ')
+        userName = eval(input('Enter a user name: '))
     if passwordMsgFlag == True :
         password = getpass.getpass("Enter user password:")
     if userRoleMsgFlag == True :
-        userRole = input('Enter a role: ')
+        userRole = eval(input('Enter a role: '))
     if userName != "" and password != "" :
         if os_name == "LINUX":
             path = os.path.join("%s","WEB-INF","classes","conf:%s","WEB-INF","classes","lib","*:%s","WEB-INF",":%s","META-INF",":%s","WEB-INF","lib","*:%s","WEB-INF","classes",":%s","WEB-INF","classes","META-INF:%s/*")%(app_home ,app_home ,app_home, app_home, app_home, app_home ,app_home,ews_lib)

@@ -43,10 +43,10 @@ def read_config(config_file):
         return json.load(f)
 
 
-print("Reading default primary config file from {}".format(DEFAULT_PRIMARY_CONFIG_PATH))
-print("Reading default secondary config file from {}".format(DEFAULT_SECONDARY_CONFIG_PATH))
-print("Writing to primary config path: {}".format(to_write_primary_config))
-print("Writing to secondary config path: {}".format(to_write_secondary_config))
+print(("Reading default primary config file from {}".format(DEFAULT_PRIMARY_CONFIG_PATH)))
+print(("Reading default secondary config file from {}".format(DEFAULT_SECONDARY_CONFIG_PATH)))
+print(("Writing to primary config path: {}".format(to_write_primary_config)))
+print(("Writing to secondary config path: {}".format(to_write_secondary_config)))
 
 default_primary_json = read_config(DEFAULT_PRIMARY_CONFIG_PATH)
 overwrite_config(to_write_primary_config, default_primary_json)

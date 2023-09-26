@@ -53,7 +53,7 @@ def performance_analyzer_main(argv_dict):
 
     object_store = perf_globals.OBJECT_STORE
 
-    if len(argv_dict.keys()) != 0:
+    if len(list(argv_dict.keys())) != 0:
         configparser.override_with_command_line_args(argv_dict)
 
     clear = configparser.get_config_value("primary", "clear")
@@ -85,7 +85,7 @@ def performance_analyzer_main(argv_dict):
         for i in range(num_calls):
             try:
                 params = object_store.get_api_param_dict(api)
-                print(api, i, params)
+                print((api, i, params))
                 resp = object_store.get_api(ranger, api)(**params)
                 time.sleep(sleep_seconds)
                 print(resp)
@@ -104,7 +104,7 @@ def performance_analyzer_main(argv_dict):
                                                                     "remote_access_log_location"
                                                                 ))
     access_df = log_parser.parse_access_logs(access_log_file, configparser.get_config_value("primary", "client_ip"))
-    print(access_df.to_string())
+    print((access_df.to_string()))
 
     if sys_logger:
         sys_logger.stop_system_log_service()
@@ -119,7 +119,7 @@ def performance_analyzer_main(argv_dict):
         else:
             main_system_df = log_parser.parse_system_logs(sys_log_file)
 
-        print("system stats = \n",main_system_df.to_string())
+        print(("system stats = \n",main_system_df.to_string()))
         secondary_sys_log_df = log_parser.parse_secondary_system_logs(secondary_sys_log_file)
         system_df = df_utils.combine_system_logs_dataframe(main_system_df, secondary_sys_log_df)
 
@@ -130,7 +130,7 @@ def performance_analyzer_main(argv_dict):
             aligned_df = df_utils.align_dataframes(system_df, access_df, system_logs_timestamp_col_name='UTC',
                                                    access_logs_timestamp_col_name='time', merge=True)
             df_utils.rename_columns(aligned_df, LogParser.header_mapping_system_logs)
-            print(aligned_df.to_string())
+            print((aligned_df.to_string()))
 
             statistics_df = aligned_df.describe()
             df_utils.rename_rows(statistics_df, {"25%": "25th_percentile", "50%": "median", "75%": "75th_percentile"})
@@ -152,7 +152,7 @@ def performance_analyzer_main(argv_dict):
         else:
             aligned_df = df_utils.align_dataframes(system_df, access_df, system_logs_timestamp_col_name='UTC',
                                                    access_logs_timestamp_col_name='time', merge=False)
-            print(aligned_df.to_string())
+            print((aligned_df.to_string()))
 
             statistics_df_access = aligned_df.describe()
             statistics_df_system = system_df.describe()
@@ -220,9 +220,9 @@ def main(argv):
     ns = parser.parse_args(argv)
     commandline_argument_dict = vars(ns)
     try:
-        if None in commandline_argument_dict.values() and all(i is None for i in commandline_argument_dict.values()):
+        if None in list(commandline_argument_dict.values()) and all(i is None for i in list(commandline_argument_dict.values())):
             commandline_argument_dict = {}
-        if None in commandline_argument_dict.values() and not all(i is None for i in commandline_argument_dict.values()):
+        if None in list(commandline_argument_dict.values()) and not all(i is None for i in list(commandline_argument_dict.values())):
             commandline_argument_dict = {}
             print_usage()
             raise ValueError("Either all the commandline arguments are provided or none are provided to run the script."
